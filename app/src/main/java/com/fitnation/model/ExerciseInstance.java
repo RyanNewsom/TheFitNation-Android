@@ -1,14 +1,14 @@
 package com.fitnation.model;
 
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.fitnation.model.parsel.ExerciseInstanceSetParcelConverter;
 import com.google.gson.annotations.Expose;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,7 +142,7 @@ public class ExerciseInstance extends RealmObject implements Cloneable, Comparab
 
     @Override
     public String getName() {
-        return exerciseName;
+        return WordUtils.capitalizeFully(exerciseName);
     }
 
     @Override

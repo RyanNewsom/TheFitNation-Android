@@ -16,9 +16,6 @@ import com.fitnation.R;
 import com.fitnation.base.BaseActivity;
 import com.fitnation.base.Navigationable;
 import com.fitnation.login.LoginBaseActivity;
-import com.fitnation.model.enums.ExerciseAction;
-import com.fitnation.profile.ProfileFragment;
-import com.fitnation.workout.parent.ExercisesParentFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +42,11 @@ public class NavigationActivity extends BaseActivity
         ButterKnife.bind(this);
         setUpActionBar();
         mNavigationView.setNavigationItemSelectedListener(this);
+        Navigator.navigateToWorkouts(this, R.id.content_main_container);
+
+        //update menu
+        updateMenuItemSelected(R.id.nav_workout_regimens);
+        updateBasedOffNavigationState(new NavigationState(false, getString(R.string.workout_regimens)));
     }
 
     private void setUpActionBar() {

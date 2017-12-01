@@ -13,8 +13,10 @@ import com.fitnation.model.WorkoutInstance;
 import com.fitnation.model.WorkoutTemplate;
 import com.fitnation.model.enums.SkillLevel;
 import com.fitnation.networking.AuthToken;
+import com.fitnation.networking.tasks.GetSkillLevelsTask;
 import com.fitnation.networking.tasks.PostWorkoutInstanceTask;
 import com.fitnation.networking.tasks.PostWorkoutTemplateTask;
+import com.fitnation.networking.tasks.callbacks.GetSkillLevelsCallback;
 import com.fitnation.networking.tasks.callbacks.WorkoutInstancePostCallback;
 import com.fitnation.networking.tasks.callbacks.WorkoutTemplatePostCallback;
 import com.fitnation.utils.PrimaryKeyFactory;
@@ -67,7 +69,21 @@ public class WorkoutDataManager extends DataManager {
 
         if(exercisesSelected != null) {
             if(workoutTemplate.getSkillLevelLevel() == null) {
-                addSkillLevelToWorkout(exercisesSelected, workoutTemplate);
+//                addSkillLevelToWorkout(exercisesSelected, workoutTemplate);
+                GetSkillLevelsTask getSkillLevelsTask = new GetSkillLevelsTask(authToken, mRequestQueue);
+                getSkillLevelsTask.getSkillLevels(new GetSkillLevelsCallback() {
+                    @Override
+                    public void onSuccess(List<SkillLevel> skillLevels) {
+                        SkillLevel beginner = skillLevels.get(0);
+                        workoutTemplate.setSkillLevelLevel(beginner.getLevel());
+                        workoutTemplate.setSkillLevelId(beginner.getId());
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        workoutTemplate.setSkillLevelLevel(SkillLevel.BEGINNER);
+                    }
+                });
             }
         }
 
